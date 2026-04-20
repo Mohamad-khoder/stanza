@@ -1,71 +1,7 @@
-import { useEffect, useState } from "react";
-
-const products = [
-  {
-    id: 1,
-    category: "fingers",
-    name: "أصابع شوكولاتة",
-    desc: "غنية وناعمة 🍫",
-    story: "شوكولاتة… تذوب ببطء… وتترك قرمشة لا تُنسى.",
-    details: ["12 غرام", "9 سم", "24 قطعة", "6 علب", "2.6 كغ"],
-    img: "/images/IMG_8216.PNG",
-  },
-  {
-    id: 2,
-    category: "fingers",
-    name: "أصابع فراولة",
-    desc: "منعشة وخفيفة 🍓",
-    story: "نكهة لطيفة… بإحساس مختلف… تبدأ من أول قضمة.",
-    img: "/images/IMG_8217.PNG",
-  },
-  {
-    id: 3,
-    category: "fingers",
-    name: "أصابع جوز الهند",
-    desc: "لمسة استوائية 🥥",
-    story: "خفيفة… بطابع استوائي… وقرمشة ناعمة.",
-    img: "/images/IMG_8219.PNG",
-  },
-  {
-    id: 4,
-    category: "puffy",
-    name: "بافي كورن جبنة",
-    desc: "نكهة قوية 🧀",
-    story: "قرمشة خفيفة… بطعم واضح… يعبي الجو متعة.",
-    img: "/images/IMG_8220.PNG",
-  },
-  {
-    id: 5,
-    category: "puffy",
-    name: "بافي كورن كاتشب",
-    desc: "كلاسيك 🍅",
-    story: "الطعم المألوف… لكن بطريقة أفضل.",
-    img: "/images/IMG_8221.PNG",
-  },
-  {
-    id: 6,
-    category: "puffy",
-    name: "بافي كورن شطة وليمون",
-    desc: "حار ومنعش 🔥🍋",
-    story: "ضربة حارة… بلمسة منعشة.",
-    img: "/images/IMG_8227.PNG",
-  },
-  {
-    id: 7,
-    category: "biscuits",
-    name: "قطع بسكوت شوكولاتة",
-    desc: "غنية بالكاكاو 🍫",
-    story: "تفاصيل صغيرة… بطعم كبير.",
-    img: "/images/stanza-finger-choco.jpeg",
-  },
-];
+import { useEffect } from "react";
 
 export default function App() {
-  const [filter, setFilter] = useState("all");
-  const [selected, setSelected] = useState(null);
-  const [menu, setMenu] = useState(false);
 
-  // scroll animation
   useEffect(() => {
     const reveal = () => {
       document.querySelectorAll(".reveal").forEach((el) => {
@@ -79,88 +15,159 @@ export default function App() {
     reveal();
   }, []);
 
-  const filtered =
-    filter === "all"
-      ? products
-      : products.filter((p) => p.category === filter);
-
   return (
     <div className="app">
 
-      {/* زر القائمة */}
-      <div className="menu" onClick={() => setMenu(!menu)}>☰</div>
-
-      {/* sidebar */}
-      <div className={`sidebar ${menu ? "open" : ""}`}>
-        <h2>STANZA</h2>
-        <p onClick={() => setFilter("all")}>كل المنتجات</p>
-        <p onClick={() => setFilter("fingers")}>الأصابع</p>
-        <p onClick={() => setFilter("puffy")}>بافي كورن</p>
-        <p onClick={() => setFilter("biscuits")}>البسكوت</p>
-      </div>
+      {/* LOGO */}
+      <div className="logo">STANZA</div>
 
       {/* HERO */}
       <section className="hero">
-        <h1 className="reveal">قرمشة خفيفة… وطعم فاخر</h1>
-        <p className="reveal">تجربة تبدأ من أول قضمة ✨</p>
+        <h1 className="reveal">
+          قرمشة خفيفة… وطعم فاخر
+        </h1>
+        <p className="reveal">
+          تجربة تبدأ من أول قضمة… وتبقى في الذاكرة
+        </p>
       </section>
 
-      {/* PRODUCTS */}
-      <section className="grid">
-        {filtered.map((p) => (
-          <div
-            key={p.id}
-            className="card reveal"
-            onClick={() => setSelected(p)}
-          >
-            <div className="imgWrap">
-              <img src={p.img} />
-            </div>
-            <h3>{p.name}</h3>
-            <p>{p.desc}</p>
-          </div>
-        ))}
-      </section>
+      {/* ========= FINGERS ========= */}
+      <section className="section">
+        <h2 className="title reveal">ستانزا أصابع الذرة</h2>
+        <p className="subtitle reveal">
+          خفيفة… لكنها تترك أثر لا يُنسى
+        </p>
 
-      {/* MODAL */}
-      {selected && (
-        <div className="modal" onClick={() => setSelected(null)}>
-          <div className="modalBox">
-            <img src={selected.img} />
-            <h2>{selected.name}</h2>
-            <p>{selected.story}</p>
+        <div className="grid">
+
+          <div className="card reveal">
+            <img src="/images/IMG_8216.PNG" />
+            <h3>شوكولاتة</h3>
+            <p>غنية وناعمة 🍫</p>
+            <p className="story">
+              شوكولاتة تذوب ببطء… وقرمشة تبقى
+            </p>
+            <ul>
+              <li>12 غرام</li>
+              <li>9 سم</li>
+              <li>24 قطعة</li>
+              <li>6 علب</li>
+            </ul>
           </div>
+
+          <div className="card reveal">
+            <img src="/images/IMG_8217.PNG" />
+            <h3>فراولة</h3>
+            <p>منعشة وخفيفة 🍓</p>
+            <p className="story">
+              نكهة تبدأ ناعمة… وتنتهي بإحساس مختلف
+            </p>
+          </div>
+
+          <div className="card reveal">
+            <img src="/images/IMG_8219.PNG" />
+            <h3>جوز الهند</h3>
+            <p>لمسة استوائية 🥥</p>
+            <p className="story">
+              خفيفة… بطابع استوائي هادئ
+            </p>
+          </div>
+
         </div>
-      )}
+      </section>
 
+      {/* ========= PUFFY ========= */}
+      <section className="section dark">
+        <h2 className="title reveal">ستانزا بافي كورن</h2>
+        <p className="subtitle reveal">
+          نكهات جريئة… مصممة لتفاجئك
+        </p>
+
+        <div className="grid">
+
+          <div className="card reveal">
+            <img src="/images/IMG_8220.PNG" />
+            <h3>جبنة</h3>
+            <p>نكهة قوية 🧀</p>
+            <p className="story">
+              قرمشة خفيفة… بطعم واضح
+            </p>
+            <ul>
+              <li>25 غرام</li>
+              <li>كيس</li>
+              <li>12 بالكرتونة</li>
+              <li>بدون ملونات</li>
+            </ul>
+          </div>
+
+          <div className="card reveal">
+            <img src="/images/IMG_8221.PNG" />
+            <h3>كاتشب</h3>
+            <p>كلاسيك 🍅</p>
+            <p className="story">
+              الطعم المألوف… لكن أفضل
+            </p>
+          </div>
+
+          <div className="card reveal">
+            <img src="/images/IMG_8227.PNG" />
+            <h3>شطة وليمون</h3>
+            <p>حار ومنعش 🔥🍋</p>
+            <p className="story">
+              ضربة حارة… بلمسة منعشة
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ========= BISCUITS ========= */}
+      <section className="section">
+        <h2 className="title reveal">ستانزا قطع الذرة</h2>
+        <p className="subtitle reveal">
+          تفاصيل صغيرة… بطعم كبير
+        </p>
+
+        <div className="grid">
+
+          <div className="card reveal">
+            <img src="/images/stanza-finger-choco.jpeg" />
+            <h3>شوكولاتة</h3>
+            <p>غنية بالكاكاو 🍫</p>
+            <p className="story">
+              كل قطعة… تجربة مكثفة
+            </p>
+            <ul>
+              <li>45 غرام</li>
+              <li>12 بالكرتونة</li>
+              <li>750 غرام</li>
+            </ul>
+          </div>
+
+        </div>
+      </section>
+
+      {/* STYLE */}
       <style>{`
-        body{margin:0;font-family:sans-serif;background:#fff}
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
 
-        .menu{
+        body {
+          margin:0;
+          font-family: 'Inter', sans-serif;
+          background:#fff;
+        }
+
+        .logo{
           position:fixed;
           top:20px;
-          left:20px;
-          font-size:28px;
-          cursor:pointer;
-          z-index:1000;
-        }
-
-        .sidebar{
-          position:fixed;
-          width:220px;
-          height:100%;
-          background:#f5f5f5;
-          padding:30px;
-          transform:translateX(-100%);
-          transition:0.4s;
-        }
-
-        .sidebar.open{
-          transform:translateX(0);
+          left:30px;
+          font-weight:500;
+          font-size:20px;
+          letter-spacing:2px;
         }
 
         .hero{
-          height:60vh;
+          height:70vh;
           display:flex;
           flex-direction:column;
           justify-content:center;
@@ -169,45 +176,76 @@ export default function App() {
         }
 
         .hero h1{
-          font-size:40px;
+          font-size:42px;
+          font-weight:300;
+        }
+
+        .hero p{
+          color:#777;
+        }
+
+        .section{
+          padding:80px 40px;
+        }
+
+        .section.dark{
+          background:#111;
+          color:white;
+        }
+
+        .title{
+          text-align:center;
+          font-size:28px;
+          font-weight:400;
+        }
+
+        .subtitle{
+          text-align:center;
+          color:#777;
+          margin-bottom:40px;
         }
 
         .grid{
           display:grid;
           grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
           gap:30px;
-          padding:40px;
         }
 
         .card{
-          background:#fff;
+          background:white;
           border-radius:25px;
           padding:20px;
           text-align:center;
           transition:0.4s;
-          transform:perspective(1000px);
+        }
+
+        .section.dark .card{
+          background:#1a1a1a;
         }
 
         .card:hover{
-          transform:scale(1.05) rotateX(3deg);
+          transform:translateY(-10px);
           box-shadow:0 20px 40px rgba(0,0,0,0.1);
-        }
-
-        .imgWrap{
-          overflow:hidden;
-          border-radius:20px;
         }
 
         img{
           width:100%;
-          transition:0.4s;
+          border-radius:20px;
         }
 
-        .card:hover img{
-          transform:scale(1.1);
+        .story{
+          color:#888;
+          font-size:14px;
+          margin:10px 0;
         }
 
-        /* reveal animation */
+        ul{
+          padding:0;
+          list-style:none;
+          font-size:13px;
+          color:#555;
+        }
+
         .reveal{
           opacity:0;
           transform:translateY(60px);
@@ -219,29 +257,9 @@ export default function App() {
           transform:translateY(0);
         }
 
-        .modal{
-          position:fixed;
-          top:0;
-          left:0;
-          width:100%;
-          height:100%;
-          background:rgba(0,0,0,0.6);
-          display:flex;
-          justify-content:center;
-          align-items:center;
-        }
-
-        .modalBox{
-          background:white;
-          padding:30px;
-          border-radius:20px;
-          max-width:400px;
-          text-align:center;
-        }
-
         @media(max-width:768px){
           .hero h1{font-size:26px;}
-          .grid{padding:20px;}
+          .section{padding:40px 20px;}
         }
       `}</style>
     </div>
