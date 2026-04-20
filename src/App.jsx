@@ -1,336 +1,171 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 
 export default function App() {
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [page, setPage] = useState("home");
+  const [category, setCategory] = useState("all");
 
-  /* صفحة المنتج */
-  if (selectedProduct) {
-    return (
-      <div style={pageStyle}>
-        <button style={backBtn} onClick={() => setSelectedProduct(null)}>
-          ← رجوع
-        </button>
+  const products = [
+    { id: 1, name: "أصابع شوكولاتة", cat: "fingers", img: "/images/stanza-finger-choco.jpeg", desc: "غنية وناعمة 🍫" },
+    { id: 2, name: "أصابع فراولة", cat: "fingers", img: "/images/IMG_8217.PNG", desc: "منعشة وخفيفة 🍓" },
+    { id: 3, name: "أصابع جوز الهند", cat: "fingers", img: "/images/IMG_8216.PNG", desc: "لمسة استوائية 🥥" },
 
-        <div style={productLayout}>
-          <img src={selectedProduct.img} style={productImg} />
+    { id: 4, name: "بافي كورن جبنة", cat: "puffy", img: "/images/IMG_8227.PNG", desc: "نكهة قوية 🧀" },
+    { id: 5, name: "بافي كورن كاتشب", cat: "puffy", img: "/images/IMG_8221.PNG", desc: "كلاسيك 🍅" },
+    { id: 6, name: "بافي كورن شطة وليمون", cat: "puffy", img: "/images/IMG_8220.PNG", desc: "حار ومنعش 🔥🍋" },
 
-          <div>
-            <h1 style={title}>{selectedProduct.title}</h1>
+    { id: 7, name: "قطع بسكوت شوكولاتة", cat: "biscuit", img: "/images/IMG_8219.PNG", desc: "غنية بالكاكاو 🍫" },
+  ];
 
-            <p style={descBig}>{selectedProduct.story}</p>
+  const filtered =
+    category === "all"
+      ? products
+      : products.filter((p) => p.cat === category);
 
-            <div style={specBox}>
-              {selectedProduct.specs.map((s, i) => (
-                <p key={i}>{s}</p>
-              ))}
-            </div>
+  return (
+    <>
+      <style>{`
+        body {
+          margin: 0;
+          font-family: 'Inter', sans-serif;
+          background: #f6f6f6;
+        }
 
-            <a
-              href={`https://wa.me/201555662867?text=طلب ${selectedProduct.title}`}
-              target="_blank"
-            >
-              <button style={btn}>اطلب الآن</button>
-            </a>
+        .container {
+          display: flex;
+        }
+
+        .sidebar {
+          width: 220px;
+          background: #f2f2f2;
+          padding: 30px 20px;
+          height: 100vh;
+          position: fixed;
+          display: flex;
+          flex-direction: column;
+          gap: 15px;
+        }
+
+        .logo {
+          color: #e68a5c;
+        }
+
+        .sidebar button {
+          background: none;
+          border: none;
+          font-size: 16px;
+          cursor: pointer;
+          text-align: right;
+        }
+
+        .content {
+          margin-left: 220px;
+          padding: 40px;
+          width: 100%;
+        }
+
+        .hero {
+          text-align: center;
+          font-size: 32px;
+        }
+
+        .sub {
+          text-align: center;
+          color: #777;
+        }
+
+        .grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 30px;
+          margin-top: 40px;
+        }
+
+        .card {
+          background: white;
+          border-radius: 20px;
+          padding: 20px;
+          text-align: center;
+          transition: 0.3s;
+        }
+
+        .card:hover {
+          transform: translateY(-10px);
+        }
+
+        .card img {
+          width: 100%;
+          border-radius: 15px;
+        }
+
+        .card button {
+          margin-top: 10px;
+          padding: 10px 20px;
+          border: none;
+          background: black;
+          color: white;
+          border-radius: 10px;
+          cursor: pointer;
+        }
+
+        /* 🔥 Mobile Fix */
+        @media (max-width: 768px) {
+
+          .container {
+            flex-direction: column;
+          }
+
+          .sidebar {
+            position: relative;
+            width: 100%;
+            height: auto;
+            flex-direction: row;
+            justify-content: space-around;
+          }
+
+          .content {
+            margin-left: 0;
+            padding: 20px;
+          }
+
+          .grid {
+            grid-template-columns: 1fr;
+          }
+
+        }
+      `}</style>
+
+      <div className="container">
+
+        {/* Sidebar */}
+        <div className="sidebar">
+          <h2 className="logo">ستانزا</h2>
+
+          <button onClick={() => setCategory("all")}>كل المنتجات</button>
+          <button onClick={() => setCategory("fingers")}>الأصابع</button>
+          <button onClick={() => setCategory("puffy")}>بافي كورن</button>
+          <button onClick={() => setCategory("biscuit")}>البسكوت</button>
+          <button>حولنا</button>
+        </div>
+
+        {/* Content */}
+        <div className="content">
+
+          <h1 className="hero">قرمشة خفيفة... وطعم فاخر</h1>
+          <p className="sub">✨ تجربة مختلفة تبدأ من أول قضمة</p>
+
+          <div className="grid">
+            {filtered.map((p) => (
+              <div className="card" key={p.id}>
+                <img src={p.img} alt="" />
+                <h3>{p.name}</h3>
+                <p>{p.desc}</p>
+                <button>اطلب الآن</button>
+              </div>
+            ))}
           </div>
+
         </div>
+
       </div>
-    );
-  }
-
-  /* صفحة حولنا */
-  if (page === "about") {
-    return (
-      <div style={pageStyle}>
-        <button style={backBtn} onClick={() => setPage("home")}>
-          ← رجوع
-        </button>
-
-        <div style={{ maxWidth: "700px" }}>
-          <h1 style={title}>STANZA… أكثر من مجرد سناك</h1>
-
-          <p style={descBig}>
-            نحن لا نصنع منتجاً فقط…  
-            نحن نصنع لحظة.
-          </p>
-
-          <p style={desc}>
-            في STANZA نؤمن أن أبسط الأشياء ممكن تكون الأفضل…  
-            قرمشة خفيفة، طعم غني، وتجربة تبدأ من أول قضمة.
-          </p>
-
-          <p style={desc}>
-            كل منتج نصممه بعناية ليكون مناسب لكل وقت:  
-            مع القهوة، في الطريق، أو حتى كاستراحة صغيرة خلال يومك.
-          </p>
-
-          <p style={desc}>
-            هدفنا؟  
-            نوصل لمرحلة تخلي المنتج نفسه يحكي عن حاله… بدون تعقيد.
-          </p>
-
-          <p style={descBig}>
-            STANZA… جرّبها مرة، وبتصير عادة.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div style={container}>
-      {/* Sidebar */}
-      <div style={sidebar}>
-        <img
-          src="/images/31d9d2c5-0399-41a2-9d9f-7e86173ab916.png"
-          style={logo}
-        />
-
-        <p style={menu}>الأصابع</p>
-        <p style={menu}>بافي كورن</p>
-        <p style={menu}>البسكوت</p>
-
-        <p style={{ ...menu, marginTop: "30px" }} onClick={() => setPage("about")}>
-          حولنا
-        </p>
-      </div>
-
-      {/* Content */}
-      <div style={content}>
-        <Fade>
-          <h1 style={mainTitle}>قرمشة خفيفة... وطعم فاخر</h1>
-          <p style={subTitle}>تجربة مختلفة تبدأ من أول قضمة ✨</p>
-        </Fade>
-
-        <Section title="أصابع ستانزا" subtitle="خفيفة… لكنها تترك أثر لا يُنسى" items={fingers} setSelectedProduct={setSelectedProduct} />
-
-        <Section title="بافي كورن" subtitle="نكهات جريئة… مصممة لتُفاجئك" items={puffy} setSelectedProduct={setSelectedProduct} />
-
-        <Section title="قطع البسكوت" subtitle="تفاصيل صغيرة… بطعم كبير" items={biscuit} setSelectedProduct={setSelectedProduct} />
-      </div>
-    </div>
+    </>
   );
 }
-
-/* Section */
-function Section({ title, subtitle, items, setSelectedProduct }) {
-  return (
-    <div style={{ marginTop: "80px" }}>
-      <Fade>
-        <h2 style={sectionTitle}>{title}</h2>
-        <p style={sectionSub}>{subtitle}</p>
-      </Fade>
-
-      <div style={grid}>
-        {items.map((item, i) => (
-          <Fade key={i}>
-            <div
-              style={card}
-              onClick={() => setSelectedProduct(item)}
-              onMouseDown={(e) => (e.currentTarget.style.transform = "scale(0.96)")}
-              onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
-              onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-            >
-              <img src={item.img} style={img} />
-
-              <h3 style={cardTitle}>{item.title}</h3>
-
-              <p style={cardDesc}>{item.desc}</p>
-              <p style={cardStory}>{item.storyShort}</p>
-            </div>
-          </Fade>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/* Animation */
-function Fade({ children }) {
-  const ref = useRef();
-  const [show, setShow] = useState(false);
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => e.isIntersecting && setShow(true));
-    obs.observe(ref.current);
-  }, []);
-
-  return (
-    <div
-      ref={ref}
-      style={{
-        opacity: show ? 1 : 0,
-        transform: show ? "translateY(0)" : "translateY(30px)",
-        transition: "0.7s",
-      }}
-    >
-      {children}
-    </div>
-  );
-}
-
-/* البيانات */
-
-const fingers = [
-  {
-    title: "أصابع شوكولاتة",
-    desc: "غنية وناعمة 🍫",
-    storyShort: "شوكولاتة تذوب… وقرمشة تبقى.",
-    img: "/images/stanza-finger-choco.jpeg",
-    story: "مزيج متوازن بين القرمشة الخفيفة وحشوة الشوكولاتة الغنية التي تذوب بسلاسة مع كل قضمة.",
-    specs: [
-      "📦 وزن القطعة: 12 غرام",
-      "📏 الطول: 9 سم",
-      "🔢 عدد القطع: 24",
-      "📦 بالكرتونة: 6 علب",
-      "⚖️ وزن الكرتونة: 2.6 كغ"
-    ]
-  },
-  {
-    title: "أصابع فراولة",
-    desc: "منعشة وخفيفة 🍓",
-    storyShort: "نكهة لطيفة… بإحساس مختلف.",
-    img: "/images/IMG_8217.PNG",
-    story: "نكهة فراولة ناعمة ومنعشة، بتوازن مثالي مع القرمشة الخفيفة لتجربة أخف وأكثر انتعاشاً.",
-    specs: [
-      "📦 وزن القطعة: 12 غرام",
-      "📏 الطول: 9 سم",
-      "🔢 عدد القطع: 24",
-      "📦 بالكرتونة: 6 علب",
-      "⚖️ وزن الكرتونة: 2.6 كغ"
-    ]
-  },
-  {
-    title: "أصابع جوز الهند",
-    desc: "لمسة استوائية 🥥",
-    storyShort: "خفيفة… بطابع استوائي.",
-    img: "/images/IMG_8216.PNG",
-    story: "طعم جوز الهند الطبيعي يعطي إحساس استوائي خفيف ومميز مع كل قضمة.",
-    specs: [
-      "📦 وزن القطعة: 12 غرام",
-      "📏 الطول: 9 سم",
-      "🔢 عدد القطع: 24",
-      "📦 بالكرتونة: 6 علب",
-      "⚖️ وزن الكرتونة: 2.6 كغ"
-    ]
-  }
-];
-
-const puffy = [
-  {
-    title: "بافي كورن جبنة",
-    desc: "نكهة قوية 🧀",
-    storyShort: "قرمشة خفيفة… بطعم واضح.",
-    img: "/images/IMG_8227.PNG",
-    story: "بافي كورن خفيف ومقرمش بنكهة جبنة غنية، بدون أي ملونات صناعية.",
-    specs: [
-      "📦 الوزن: 25 غرام",
-      "📦 التعبئة: كيس",
-      "🔢 بالكرتونة: 12",
-      "⚖️ وزن الكرتونة: 450 غ",
-      "✔️ بدون ملونات صناعية"
-    ]
-  },
-  {
-    title: "بافي كورن كاتشب",
-    desc: "طعم كلاسيكي 🍅",
-    storyShort: "المألوف… لكن أفضل.",
-    img: "/images/IMG_8221.PNG",
-    story: "نكهة الكاتشب المتوازنة تعطي طعماً مألوفاً لكن بقرمشة أخف.",
-    specs: [
-      "📦 الوزن: 25 غرام",
-      "📦 التعبئة: كيس",
-      "🔢 بالكرتونة: 12",
-      "⚖️ وزن الكرتونة: 450 غ"
-    ]
-  },
-  {
-    title: "بافي كورن شطة وليمون",
-    desc: "حار ومنعش 🔥🍋",
-    storyShort: "ضربة حارة… بلمسة منعشة.",
-    img: "/images/IMG_8220.PNG",
-    story: "مزيج جريء من الشطة والليمون يعطي إحساس قوي ومختلف.",
-    specs: [
-      "📦 الوزن: 25 غرام",
-      "📦 التعبئة: كيس",
-      "🔢 بالكرتونة: 12",
-      "⚖️ وزن الكرتونة: 450 غ"
-    ]
-  }
-];
-
-const biscuit = [
-  {
-    title: "قطع بسكوت شوكولاتة",
-    desc: "غنية بالكاكاو 🍫",
-    storyShort: "قطع صغيرة… بطعم كبير.",
-    img: "/images/IMG_8219.PNG",
-    story: "بسكوت غني بالكاكاو مع طعم شوكولاتة واضح ومميز.",
-    specs: [
-      "📦 الوزن: 45 غرام",
-      "🍫 الحشوة: شوكولاتة",
-      "🔢 بالكرتونة: 12",
-      "⚖️ وزن الكرتونة: 750 غ",
-      "✔️ غنية بالكاكاو"
-    ]
-  }
-];
-
-/* Styles */
-
-const container = { display: "flex", fontFamily: "-apple-system", background: "#fafafa" };
-const sidebar = { width: "220px", padding: "30px", background: "#f3f3f3" };
-const content = { flex: 1, padding: "50px" };
-
-const grid = { display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "30px" };
-
-const card = {
-  background: "#fff",
-  padding: "20px",
-  borderRadius: "20px",
-  cursor: "pointer",
-  transition: "0.2s",
-  boxShadow: "0 10px 25px rgba(0,0,0,0.05)"
-};
-
-const img = { width: "100%", borderRadius: "15px", marginBottom: "10px" };
-
-const menu = { marginBottom: "12px", cursor: "pointer", color: "#444" };
-
-const mainTitle = { fontSize: "42px", fontWeight: "300" };
-const subTitle = { color: "#777", marginBottom: "40px" };
-
-const sectionTitle = { fontSize: "28px", fontWeight: "300" };
-const sectionSub = { color: "#777", marginBottom: "20px" };
-
-const cardTitle = { fontSize: "18px" };
-const cardDesc = { color: "#777" };
-const cardStory = { color: "#999", fontSize: "13px" };
-
-const title = { fontSize: "40px", fontWeight: "300" };
-const desc = { color: "#666", marginBottom: "10px" };
-const descBig = { color: "#444", fontSize: "18px", marginBottom: "20px" };
-
-const btn = {
-  marginTop: "20px",
-  padding: "12px 25px",
-  background: "#000",
-  color: "#fff",
-  borderRadius: "12px",
-  border: "none",
-  cursor: "pointer"
-};
-
-const pageStyle = { padding: "50px" };
-const productLayout = { display: "flex", gap: "50px", alignItems: "center" };
-const productImg = { width: "400px", borderRadius: "20px" };
-
-const specBox = {
-  background: "#f5f5f7",
-  padding: "20px",
-  borderRadius: "15px",
-  marginTop: "20px"
-};
-
-const logo = { width: "120px", marginBottom: "40px" };
-const backBtn = { marginBottom: "20px", cursor: "pointer" };
