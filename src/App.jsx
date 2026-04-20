@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function App() {
+  const [selected, setSelected] = useState(null);
 
   useEffect(() => {
     const reveal = () => {
@@ -15,23 +16,23 @@ export default function App() {
     reveal();
   }, []);
 
+  const openProduct = (product) => {
+    setSelected(product);
+  };
+
   return (
-    <div className="app">
+    <div>
 
       {/* LOGO */}
       <div className="logo">STANZA</div>
 
       {/* HERO */}
       <section className="hero">
-        <h1 className="reveal">
-          قرمشة خفيفة… وطعم فاخر
-        </h1>
-        <p className="reveal">
-          تجربة تبدأ من أول قضمة… وتبقى في الذاكرة
-        </p>
+        <h1 className="reveal">قرمشة خفيفة… وطعم فاخر</h1>
+        <p className="reveal">تجربة تبدأ من أول قضمة ✨</p>
       </section>
 
-      {/* ========= FINGERS ========= */}
+      {/* ===== أصابع ===== */}
       <section className="section">
         <h2 className="title reveal">ستانزا أصابع الذرة</h2>
         <p className="subtitle reveal">
@@ -40,43 +41,49 @@ export default function App() {
 
         <div className="grid">
 
-          <div className="card reveal">
-            <img src="/images/IMG_8216.PNG" />
+          <div className="card reveal" onClick={() => openProduct({
+            name:"أصابع شوكولاتة",
+            img:"/images/IMG_8216.PNG",
+            story:"شوكولاتة تذوب ببطء… وقرمشة تبقى",
+            details:[
+              "12 غرام",
+              "9 سم",
+              "24 قطعة",
+              "6 علب",
+              "2.6 كغ"
+            ]
+          })}>
+            <img src="/images/IMG_8216.PNG"/>
             <h3>شوكولاتة</h3>
             <p>غنية وناعمة 🍫</p>
-            <p className="story">
-              شوكولاتة تذوب ببطء… وقرمشة تبقى
-            </p>
-            <ul>
-              <li>12 غرام</li>
-              <li>9 سم</li>
-              <li>24 قطعة</li>
-              <li>6 علب</li>
-            </ul>
           </div>
 
-          <div className="card reveal">
-            <img src="/images/IMG_8217.PNG" />
+          <div className="card reveal" onClick={() => openProduct({
+            name:"أصابع فراولة",
+            img:"/images/IMG_8217.PNG",
+            story:"نكهة تبدأ ناعمة… وتنتهي بإحساس مختلف",
+            details:["نفس المواصفات"]
+          })}>
+            <img src="/images/IMG_8217.PNG"/>
             <h3>فراولة</h3>
             <p>منعشة وخفيفة 🍓</p>
-            <p className="story">
-              نكهة تبدأ ناعمة… وتنتهي بإحساس مختلف
-            </p>
           </div>
 
-          <div className="card reveal">
-            <img src="/images/IMG_8219.PNG" />
+          <div className="card reveal" onClick={() => openProduct({
+            name:"أصابع جوز الهند",
+            img:"/images/IMG_8219.PNG",
+            story:"خفيفة بطابع استوائي",
+            details:["نفس المواصفات"]
+          })}>
+            <img src="/images/IMG_8219.PNG"/>
             <h3>جوز الهند</h3>
             <p>لمسة استوائية 🥥</p>
-            <p className="story">
-              خفيفة… بطابع استوائي هادئ
-            </p>
           </div>
 
         </div>
       </section>
 
-      {/* ========= PUFFY ========= */}
+      {/* ===== بافي كورن ===== */}
       <section className="section dark">
         <h2 className="title reveal">ستانزا بافي كورن</h2>
         <p className="subtitle reveal">
@@ -85,43 +92,38 @@ export default function App() {
 
         <div className="grid">
 
-          <div className="card reveal">
-            <img src="/images/IMG_8220.PNG" />
+          <div className="card reveal" onClick={() => openProduct({
+            name:"جبنة",
+            img:"/images/IMG_8220.PNG",
+            story:"قرمشة خفيفة بطعم واضح",
+            details:["25 غرام","12 بالكرتونة","بدون ملونات"]
+          })}>
+            <img src="/images/IMG_8220.PNG"/>
             <h3>جبنة</h3>
-            <p>نكهة قوية 🧀</p>
-            <p className="story">
-              قرمشة خفيفة… بطعم واضح
-            </p>
-            <ul>
-              <li>25 غرام</li>
-              <li>كيس</li>
-              <li>12 بالكرتونة</li>
-              <li>بدون ملونات</li>
-            </ul>
           </div>
 
-          <div className="card reveal">
-            <img src="/images/IMG_8221.PNG" />
+          <div className="card reveal" onClick={() => openProduct({
+            name:"كاتشب",
+            img:"/images/IMG_8221.PNG",
+            story:"الطعم المألوف… لكن أفضل"
+          })}>
+            <img src="/images/IMG_8221.PNG"/>
             <h3>كاتشب</h3>
-            <p>كلاسيك 🍅</p>
-            <p className="story">
-              الطعم المألوف… لكن أفضل
-            </p>
           </div>
 
-          <div className="card reveal">
-            <img src="/images/IMG_8227.PNG" />
+          <div className="card reveal" onClick={() => openProduct({
+            name:"شطة وليمون",
+            img:"/images/IMG_8227.PNG",
+            story:"ضربة حارة بلمسة منعشة"
+          })}>
+            <img src="/images/IMG_8227.PNG"/>
             <h3>شطة وليمون</h3>
-            <p>حار ومنعش 🔥🍋</p>
-            <p className="story">
-              ضربة حارة… بلمسة منعشة
-            </p>
           </div>
 
         </div>
       </section>
 
-      {/* ========= BISCUITS ========= */}
+      {/* ===== قطع ===== */}
       <section className="section">
         <h2 className="title reveal">ستانزا قطع الذرة</h2>
         <p className="subtitle reveal">
@@ -129,41 +131,45 @@ export default function App() {
         </p>
 
         <div className="grid">
-
-          <div className="card reveal">
-            <img src="/images/stanza-finger-choco.jpeg" />
+          <div className="card reveal" onClick={() => openProduct({
+            name:"قطع شوكولاتة",
+            img:"/images/stanza-finger-choco.jpeg",
+            story:"كل قطعة تجربة مكثفة",
+            details:["45 غرام","12 بالكرتونة","750 غرام"]
+          })}>
+            <img src="/images/stanza-finger-choco.jpeg"/>
             <h3>شوكولاتة</h3>
-            <p>غنية بالكاكاو 🍫</p>
-            <p className="story">
-              كل قطعة… تجربة مكثفة
-            </p>
-            <ul>
-              <li>45 غرام</li>
-              <li>12 بالكرتونة</li>
-              <li>750 غرام</li>
-            </ul>
           </div>
-
         </div>
       </section>
 
-      {/* STYLE */}
+      {/* ===== MODAL ===== */}
+      {selected && (
+        <div className="modal" onClick={() => setSelected(null)}>
+          <div className="modalBox">
+            <img src={selected.img}/>
+            <h2>{selected.name}</h2>
+            <p className="story">{selected.story}</p>
+
+            {selected.details && (
+              <ul>
+                {selected.details.map((d,i)=><li key={i}>{d}</li>)}
+              </ul>
+            )}
+          </div>
+        </div>
+      )}
+
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
 
-        body {
-          margin:0;
-          font-family: 'Inter', sans-serif;
-          background:#fff;
-        }
+        body{margin:0;font-family:Inter;}
 
         .logo{
           position:fixed;
           top:20px;
           left:30px;
           font-weight:500;
-          font-size:20px;
-          letter-spacing:2px;
         }
 
         .hero{
@@ -175,93 +181,62 @@ export default function App() {
           text-align:center;
         }
 
-        .hero h1{
-          font-size:42px;
-          font-weight:300;
-        }
-
-        .hero p{
-          color:#777;
-        }
-
-        .section{
-          padding:80px 40px;
-        }
-
-        .section.dark{
-          background:#111;
-          color:white;
-        }
-
-        .title{
-          text-align:center;
-          font-size:28px;
-          font-weight:400;
-        }
-
-        .subtitle{
-          text-align:center;
-          color:#777;
-          margin-bottom:40px;
-        }
+        .section{padding:80px 40px;}
+        .dark{background:#111;color:white;}
 
         .grid{
           display:grid;
           grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-          gap:30px;
+          gap:25px;
         }
 
         .card{
           background:white;
-          border-radius:25px;
-          padding:20px;
+          border-radius:20px;
+          padding:15px;
           text-align:center;
-          transition:0.4s;
+          cursor:pointer;
+          transition:0.3s;
         }
 
-        .section.dark .card{
-          background:#1a1a1a;
-        }
+        .dark .card{background:#1a1a1a;}
 
         .card:hover{
-          transform:translateY(-10px);
-          box-shadow:0 20px 40px rgba(0,0,0,0.1);
+          transform:translateY(-8px);
         }
 
-        img{
-          width:100%;
+        img{width:100%;border-radius:15px;}
+
+        .modal{
+          position:fixed;
+          top:0;left:0;
+          width:100%;height:100%;
+          background:rgba(0,0,0,0.6);
+          display:flex;
+          justify-content:center;
+          align-items:center;
+        }
+
+        .modalBox{
+          background:white;
+          padding:30px;
           border-radius:20px;
-        }
-
-        .story{
-          color:#888;
-          font-size:14px;
-          margin:10px 0;
-        }
-
-        ul{
-          padding:0;
-          list-style:none;
-          font-size:13px;
-          color:#555;
+          max-width:400px;
+          text-align:center;
         }
 
         .reveal{
           opacity:0;
-          transform:translateY(60px);
-          transition:0.8s;
+          transform:translateY(40px);
+          transition:0.6s;
         }
 
         .reveal.active{
           opacity:1;
           transform:translateY(0);
         }
-
-        @media(max-width:768px){
-          .hero h1{font-size:26px;}
-          .section{padding:40px 20px;}
-        }
       `}</style>
+
     </div>
   );
 }
