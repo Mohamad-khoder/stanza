@@ -1,242 +1,336 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function App() {
-  const [selected, setSelected] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [page, setPage] = useState("home");
 
-  useEffect(() => {
-    const reveal = () => {
-      document.querySelectorAll(".reveal").forEach((el) => {
-        const top = el.getBoundingClientRect().top;
-        if (top < window.innerHeight - 80) {
-          el.classList.add("active");
-        }
-      });
-    };
-    window.addEventListener("scroll", reveal);
-    reveal();
-  }, []);
+  /* صفحة المنتج */
+  if (selectedProduct) {
+    return (
+      <div style={pageStyle}>
+        <button style={backBtn} onClick={() => setSelectedProduct(null)}>
+          ← رجوع
+        </button>
 
-  const openProduct = (product) => {
-    setSelected(product);
-  };
+        <div style={productLayout}>
+          <img src={selectedProduct.img} style={productImg} />
+
+          <div>
+            <h1 style={title}>{selectedProduct.title}</h1>
+
+            <p style={descBig}>{selectedProduct.story}</p>
+
+            <div style={specBox}>
+              {selectedProduct.specs.map((s, i) => (
+                <p key={i}>{s}</p>
+              ))}
+            </div>
+
+            <a
+              href={`https://wa.me/201555662867?text=طلب ${selectedProduct.title}`}
+              target="_blank"
+            >
+              <button style={btn}>اطلب الآن</button>
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  /* صفحة حولنا */
+  if (page === "about") {
+    return (
+      <div style={pageStyle}>
+        <button style={backBtn} onClick={() => setPage("home")}>
+          ← رجوع
+        </button>
+
+        <div style={{ maxWidth: "700px" }}>
+          <h1 style={title}>STANZA… أكثر من مجرد سناك</h1>
+
+          <p style={descBig}>
+            نحن لا نصنع منتجاً فقط…  
+            نحن نصنع لحظة.
+          </p>
+
+          <p style={desc}>
+            في STANZA نؤمن أن أبسط الأشياء ممكن تكون الأفضل…  
+            قرمشة خفيفة، طعم غني، وتجربة تبدأ من أول قضمة.
+          </p>
+
+          <p style={desc}>
+            كل منتج نصممه بعناية ليكون مناسب لكل وقت:  
+            مع القهوة، في الطريق، أو حتى كاستراحة صغيرة خلال يومك.
+          </p>
+
+          <p style={desc}>
+            هدفنا؟  
+            نوصل لمرحلة تخلي المنتج نفسه يحكي عن حاله… بدون تعقيد.
+          </p>
+
+          <p style={descBig}>
+            STANZA… جرّبها مرة، وبتصير عادة.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div>
+    <div style={container}>
+      {/* Sidebar */}
+      <div style={sidebar}>
+        <img
+          src="/images/31d9d2c5-0399-41a2-9d9f-7e86173ab916.png"
+          style={logo}
+        />
 
-      {/* LOGO */}
-      <div className="logo">STANZA</div>
+        <p style={menu}>الأصابع</p>
+        <p style={menu}>بافي كورن</p>
+        <p style={menu}>البسكوت</p>
 
-      {/* HERO */}
-      <section className="hero">
-        <h1 className="reveal">قرمشة خفيفة… وطعم فاخر</h1>
-        <p className="reveal">تجربة تبدأ من أول قضمة ✨</p>
-      </section>
-
-      {/* ===== أصابع ===== */}
-      <section className="section">
-        <h2 className="title reveal">ستانزا أصابع الذرة</h2>
-        <p className="subtitle reveal">
-          خفيفة… لكنها تترك أثر لا يُنسى
+        <p style={{ ...menu, marginTop: "30px" }} onClick={() => setPage("about")}>
+          حولنا
         </p>
+      </div>
 
-        <div className="grid">
+      {/* Content */}
+      <div style={content}>
+        <Fade>
+          <h1 style={mainTitle}>قرمشة خفيفة... وطعم فاخر</h1>
+          <p style={subTitle}>تجربة مختلفة تبدأ من أول قضمة ✨</p>
+        </Fade>
 
-          <div className="card reveal" onClick={() => openProduct({
-            name:"أصابع شوكولاتة",
-            img:"/images/IMG_8216.PNG",
-            story:"شوكولاتة تذوب ببطء… وقرمشة تبقى",
-            details:[
-              "12 غرام",
-              "9 سم",
-              "24 قطعة",
-              "6 علب",
-              "2.6 كغ"
-            ]
-          })}>
-            <img src="/images/IMG_8216.PNG"/>
-            <h3>شوكولاتة</h3>
-            <p>غنية وناعمة 🍫</p>
-          </div>
+        <Section title="أصابع ستانزا" subtitle="خفيفة… لكنها تترك أثر لا يُنسى" items={fingers} setSelectedProduct={setSelectedProduct} />
 
-          <div className="card reveal" onClick={() => openProduct({
-            name:"أصابع فراولة",
-            img:"/images/IMG_8217.PNG",
-            story:"نكهة تبدأ ناعمة… وتنتهي بإحساس مختلف",
-            details:["نفس المواصفات"]
-          })}>
-            <img src="/images/IMG_8217.PNG"/>
-            <h3>فراولة</h3>
-            <p>منعشة وخفيفة 🍓</p>
-          </div>
+        <Section title="بافي كورن" subtitle="نكهات جريئة… مصممة لتُفاجئك" items={puffy} setSelectedProduct={setSelectedProduct} />
 
-          <div className="card reveal" onClick={() => openProduct({
-            name:"أصابع جوز الهند",
-            img:"/images/IMG_8219.PNG",
-            story:"خفيفة بطابع استوائي",
-            details:["نفس المواصفات"]
-          })}>
-            <img src="/images/IMG_8219.PNG"/>
-            <h3>جوز الهند</h3>
-            <p>لمسة استوائية 🥥</p>
-          </div>
-
-        </div>
-      </section>
-
-      {/* ===== بافي كورن ===== */}
-      <section className="section dark">
-        <h2 className="title reveal">ستانزا بافي كورن</h2>
-        <p className="subtitle reveal">
-          نكهات جريئة… مصممة لتفاجئك
-        </p>
-
-        <div className="grid">
-
-          <div className="card reveal" onClick={() => openProduct({
-            name:"جبنة",
-            img:"/images/IMG_8220.PNG",
-            story:"قرمشة خفيفة بطعم واضح",
-            details:["25 غرام","12 بالكرتونة","بدون ملونات"]
-          })}>
-            <img src="/images/IMG_8220.PNG"/>
-            <h3>جبنة</h3>
-          </div>
-
-          <div className="card reveal" onClick={() => openProduct({
-            name:"كاتشب",
-            img:"/images/IMG_8221.PNG",
-            story:"الطعم المألوف… لكن أفضل"
-          })}>
-            <img src="/images/IMG_8221.PNG"/>
-            <h3>كاتشب</h3>
-          </div>
-
-          <div className="card reveal" onClick={() => openProduct({
-            name:"شطة وليمون",
-            img:"/images/IMG_8227.PNG",
-            story:"ضربة حارة بلمسة منعشة"
-          })}>
-            <img src="/images/IMG_8227.PNG"/>
-            <h3>شطة وليمون</h3>
-          </div>
-
-        </div>
-      </section>
-
-      {/* ===== قطع ===== */}
-      <section className="section">
-        <h2 className="title reveal">ستانزا قطع الذرة</h2>
-        <p className="subtitle reveal">
-          تفاصيل صغيرة… بطعم كبير
-        </p>
-
-        <div className="grid">
-          <div className="card reveal" onClick={() => openProduct({
-            name:"قطع شوكولاتة",
-            img:"/images/stanza-finger-choco.jpeg",
-            story:"كل قطعة تجربة مكثفة",
-            details:["45 غرام","12 بالكرتونة","750 غرام"]
-          })}>
-            <img src="/images/stanza-finger-choco.jpeg"/>
-            <h3>شوكولاتة</h3>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== MODAL ===== */}
-      {selected && (
-        <div className="modal" onClick={() => setSelected(null)}>
-          <div className="modalBox">
-            <img src={selected.img}/>
-            <h2>{selected.name}</h2>
-            <p className="story">{selected.story}</p>
-
-            {selected.details && (
-              <ul>
-                {selected.details.map((d,i)=><li key={i}>{d}</li>)}
-              </ul>
-            )}
-          </div>
-        </div>
-      )}
-
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
-
-        body{margin:0;font-family:Inter;}
-
-        .logo{
-          position:fixed;
-          top:20px;
-          left:30px;
-          font-weight:500;
-        }
-
-        .hero{
-          height:70vh;
-          display:flex;
-          flex-direction:column;
-          justify-content:center;
-          align-items:center;
-          text-align:center;
-        }
-
-        .section{padding:80px 40px;}
-        .dark{background:#111;color:white;}
-
-        .grid{
-          display:grid;
-          grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-          gap:25px;
-        }
-
-        .card{
-          background:white;
-          border-radius:20px;
-          padding:15px;
-          text-align:center;
-          cursor:pointer;
-          transition:0.3s;
-        }
-
-        .dark .card{background:#1a1a1a;}
-
-        .card:hover{
-          transform:translateY(-8px);
-        }
-
-        img{width:100%;border-radius:15px;}
-
-        .modal{
-          position:fixed;
-          top:0;left:0;
-          width:100%;height:100%;
-          background:rgba(0,0,0,0.6);
-          display:flex;
-          justify-content:center;
-          align-items:center;
-        }
-
-        .modalBox{
-          background:white;
-          padding:30px;
-          border-radius:20px;
-          max-width:400px;
-          text-align:center;
-        }
-
-        .reveal{
-          opacity:0;
-          transform:translateY(40px);
-          transition:0.6s;
-        }
-
-        .reveal.active{
-          opacity:1;
-          transform:translateY(0);
-        }
-      `}</style>
-
+        <Section title="قطع البسكوت" subtitle="تفاصيل صغيرة… بطعم كبير" items={biscuit} setSelectedProduct={setSelectedProduct} />
+      </div>
     </div>
   );
 }
+
+/* Section */
+function Section({ title, subtitle, items, setSelectedProduct }) {
+  return (
+    <div style={{ marginTop: "80px" }}>
+      <Fade>
+        <h2 style={sectionTitle}>{title}</h2>
+        <p style={sectionSub}>{subtitle}</p>
+      </Fade>
+
+      <div style={grid}>
+        {items.map((item, i) => (
+          <Fade key={i}>
+            <div
+              style={card}
+              onClick={() => setSelectedProduct(item)}
+              onMouseDown={(e) => (e.currentTarget.style.transform = "scale(0.96)")}
+              onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+            >
+              <img src={item.img} style={img} />
+
+              <h3 style={cardTitle}>{item.title}</h3>
+
+              <p style={cardDesc}>{item.desc}</p>
+              <p style={cardStory}>{item.storyShort}</p>
+            </div>
+          </Fade>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* Animation */
+function Fade({ children }) {
+  const ref = useRef();
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => e.isIntersecting && setShow(true));
+    obs.observe(ref.current);
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        opacity: show ? 1 : 0,
+        transform: show ? "translateY(0)" : "translateY(30px)",
+        transition: "0.7s",
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+/* البيانات */
+
+const fingers = [
+  {
+    title: "أصابع شوكولاتة",
+    desc: "غنية وناعمة 🍫",
+    storyShort: "شوكولاتة تذوب… وقرمشة تبقى.",
+    img: "/images/stanza-finger-choco.jpeg",
+    story: "مزيج متوازن بين القرمشة الخفيفة وحشوة الشوكولاتة الغنية التي تذوب بسلاسة مع كل قضمة.",
+    specs: [
+      "📦 وزن القطعة: 12 غرام",
+      "📏 الطول: 9 سم",
+      "🔢 عدد القطع: 24",
+      "📦 بالكرتونة: 6 علب",
+      "⚖️ وزن الكرتونة: 2.6 كغ"
+    ]
+  },
+  {
+    title: "أصابع فراولة",
+    desc: "منعشة وخفيفة 🍓",
+    storyShort: "نكهة لطيفة… بإحساس مختلف.",
+    img: "/images/IMG_8217.PNG",
+    story: "نكهة فراولة ناعمة ومنعشة، بتوازن مثالي مع القرمشة الخفيفة لتجربة أخف وأكثر انتعاشاً.",
+    specs: [
+      "📦 وزن القطعة: 12 غرام",
+      "📏 الطول: 9 سم",
+      "🔢 عدد القطع: 24",
+      "📦 بالكرتونة: 6 علب",
+      "⚖️ وزن الكرتونة: 2.6 كغ"
+    ]
+  },
+  {
+    title: "أصابع جوز الهند",
+    desc: "لمسة استوائية 🥥",
+    storyShort: "خفيفة… بطابع استوائي.",
+    img: "/images/IMG_8216.PNG",
+    story: "طعم جوز الهند الطبيعي يعطي إحساس استوائي خفيف ومميز مع كل قضمة.",
+    specs: [
+      "📦 وزن القطعة: 12 غرام",
+      "📏 الطول: 9 سم",
+      "🔢 عدد القطع: 24",
+      "📦 بالكرتونة: 6 علب",
+      "⚖️ وزن الكرتونة: 2.6 كغ"
+    ]
+  }
+];
+
+const puffy = [
+  {
+    title: "بافي كورن جبنة",
+    desc: "نكهة قوية 🧀",
+    storyShort: "قرمشة خفيفة… بطعم واضح.",
+    img: "/images/IMG_8227.PNG",
+    story: "بافي كورن خفيف ومقرمش بنكهة جبنة غنية، بدون أي ملونات صناعية.",
+    specs: [
+      "📦 الوزن: 25 غرام",
+      "📦 التعبئة: كيس",
+      "🔢 بالكرتونة: 12",
+      "⚖️ وزن الكرتونة: 450 غ",
+      "✔️ بدون ملونات صناعية"
+    ]
+  },
+  {
+    title: "بافي كورن كاتشب",
+    desc: "طعم كلاسيكي 🍅",
+    storyShort: "المألوف… لكن أفضل.",
+    img: "/images/IMG_8221.PNG",
+    story: "نكهة الكاتشب المتوازنة تعطي طعماً مألوفاً لكن بقرمشة أخف.",
+    specs: [
+      "📦 الوزن: 25 غرام",
+      "📦 التعبئة: كيس",
+      "🔢 بالكرتونة: 12",
+      "⚖️ وزن الكرتونة: 450 غ"
+    ]
+  },
+  {
+    title: "بافي كورن شطة وليمون",
+    desc: "حار ومنعش 🔥🍋",
+    storyShort: "ضربة حارة… بلمسة منعشة.",
+    img: "/images/IMG_8220.PNG",
+    story: "مزيج جريء من الشطة والليمون يعطي إحساس قوي ومختلف.",
+    specs: [
+      "📦 الوزن: 25 غرام",
+      "📦 التعبئة: كيس",
+      "🔢 بالكرتونة: 12",
+      "⚖️ وزن الكرتونة: 450 غ"
+    ]
+  }
+];
+
+const biscuit = [
+  {
+    title: "قطع بسكوت شوكولاتة",
+    desc: "غنية بالكاكاو 🍫",
+    storyShort: "قطع صغيرة… بطعم كبير.",
+    img: "/images/IMG_8219.PNG",
+    story: "بسكوت غني بالكاكاو مع طعم شوكولاتة واضح ومميز.",
+    specs: [
+      "📦 الوزن: 45 غرام",
+      "🍫 الحشوة: شوكولاتة",
+      "🔢 بالكرتونة: 12",
+      "⚖️ وزن الكرتونة: 750 غ",
+      "✔️ غنية بالكاكاو"
+    ]
+  }
+];
+
+/* Styles */
+
+const container = { display: "flex", fontFamily: "-apple-system", background: "#fafafa" };
+const sidebar = { width: "220px", padding: "30px", background: "#f3f3f3" };
+const content = { flex: 1, padding: "50px" };
+
+const grid = { display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "30px" };
+
+const card = {
+  background: "#fff",
+  padding: "20px",
+  borderRadius: "20px",
+  cursor: "pointer",
+  transition: "0.2s",
+  boxShadow: "0 10px 25px rgba(0,0,0,0.05)"
+};
+
+const img = { width: "100%", borderRadius: "15px", marginBottom: "10px" };
+
+const menu = { marginBottom: "12px", cursor: "pointer", color: "#444" };
+
+const mainTitle = { fontSize: "42px", fontWeight: "300" };
+const subTitle = { color: "#777", marginBottom: "40px" };
+
+const sectionTitle = { fontSize: "28px", fontWeight: "300" };
+const sectionSub = { color: "#777", marginBottom: "20px" };
+
+const cardTitle = { fontSize: "18px" };
+const cardDesc = { color: "#777" };
+const cardStory = { color: "#999", fontSize: "13px" };
+
+const title = { fontSize: "40px", fontWeight: "300" };
+const desc = { color: "#666", marginBottom: "10px" };
+const descBig = { color: "#444", fontSize: "18px", marginBottom: "20px" };
+
+const btn = {
+  marginTop: "20px",
+  padding: "12px 25px",
+  background: "#000",
+  color: "#fff",
+  borderRadius: "12px",
+  border: "none",
+  cursor: "pointer"
+};
+
+const pageStyle = { padding: "50px" };
+const productLayout = { display: "flex", gap: "50px", alignItems: "center" };
+const productImg = { width: "400px", borderRadius: "20px" };
+
+const specBox = {
+  background: "#f5f5f7",
+  padding: "20px",
+  borderRadius: "15px",
+  marginTop: "20px"
+};
+
+const logo = { width: "120px", marginBottom: "40px" };
+const backBtn = { marginBottom: "20px", cursor: "pointer" };
