@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const products = [
   {
@@ -7,13 +7,7 @@ const products = [
     name: "أصابع شوكولاتة",
     desc: "غنية وناعمة 🍫",
     story: "شوكولاتة… تذوب ببطء… وتترك قرمشة لا تُنسى.",
-    details: [
-      "الوزن: 12 غرام",
-      "الطول: 9 سم",
-      "24 قطعة بالعلبة",
-      "6 علب بالكرتونة",
-      "وزن الكرتونة: 2.6 كغ",
-    ],
+    details: ["12 غرام", "9 سم", "24 قطعة", "6 علب", "2.6 كغ"],
     img: "/images/IMG_8216.PNG",
   },
   {
@@ -22,7 +16,6 @@ const products = [
     name: "أصابع فراولة",
     desc: "منعشة وخفيفة 🍓",
     story: "نكهة لطيفة… بإحساس مختلف… تبدأ من أول قضمة.",
-    details: ["نفس مواصفات الشوكولاتة"],
     img: "/images/IMG_8217.PNG",
   },
   {
@@ -31,7 +24,6 @@ const products = [
     name: "أصابع جوز الهند",
     desc: "لمسة استوائية 🥥",
     story: "خفيفة… بطابع استوائي… وقرمشة ناعمة.",
-    details: ["نفس المواصفات"],
     img: "/images/IMG_8219.PNG",
   },
   {
@@ -40,7 +32,6 @@ const products = [
     name: "بافي كورن جبنة",
     desc: "نكهة قوية 🧀",
     story: "قرمشة خفيفة… بطعم واضح… يعبي الجو متعة.",
-    details: ["25 غرام", "كيس", "12 بالكرتونة", "خفيف بدون ملونات"],
     img: "/images/IMG_8220.PNG",
   },
   {
@@ -65,7 +56,6 @@ const products = [
     name: "قطع بسكوت شوكولاتة",
     desc: "غنية بالكاكاو 🍫",
     story: "تفاصيل صغيرة… بطعم كبير.",
-    details: ["45 غرام", "12 بالكرتونة", "750 غرام كرتونة"],
     img: "/images/stanza-finger-choco.jpeg",
   },
 ];
@@ -73,7 +63,21 @@ const products = [
 export default function App() {
   const [filter, setFilter] = useState("all");
   const [selected, setSelected] = useState(null);
-  const [openMenu, setOpenMenu] = useState(false);
+  const [menu, setMenu] = useState(false);
+
+  // scroll animation
+  useEffect(() => {
+    const reveal = () => {
+      document.querySelectorAll(".reveal").forEach((el) => {
+        const top = el.getBoundingClientRect().top;
+        if (top < window.innerHeight - 80) {
+          el.classList.add("active");
+        }
+      });
+    };
+    window.addEventListener("scroll", reveal);
+    reveal();
+  }, []);
 
   const filtered =
     filter === "all"
@@ -84,72 +88,55 @@ export default function App() {
     <div className="app">
 
       {/* زر القائمة */}
-      <div className="menu-btn" onClick={() => setOpenMenu(!openMenu)}>
-        ☰
-      </div>
+      <div className="menu" onClick={() => setMenu(!menu)}>☰</div>
 
-      {/* Sidebar */}
-      <div className={`sidebar ${openMenu ? "open" : ""}`}>
-        <h2 className="logo">STANZA</h2>
-
+      {/* sidebar */}
+      <div className={`sidebar ${menu ? "open" : ""}`}>
+        <h2>STANZA</h2>
         <p onClick={() => setFilter("all")}>كل المنتجات</p>
         <p onClick={() => setFilter("fingers")}>الأصابع</p>
         <p onClick={() => setFilter("puffy")}>بافي كورن</p>
         <p onClick={() => setFilter("biscuits")}>البسكوت</p>
-        <p>حولنا</p>
       </div>
 
-      {/* المحتوى */}
-      <div className="content">
+      {/* HERO */}
+      <section className="hero">
+        <h1 className="reveal">قرمشة خفيفة… وطعم فاخر</h1>
+        <p className="reveal">تجربة تبدأ من أول قضمة ✨</p>
+      </section>
 
-        <h1 className="title">
-          قرمشة خفيفة… وطعم فاخر
-        </h1>
-
-        <p className="subtitle">
-          تجربة مختلفة تبدأ من أول قضمة ✨
-        </p>
-
-        <div className="grid">
-          {filtered.map((p) => (
-            <div
-              key={p.id}
-              className="card"
-              onClick={() => setSelected(p)}
-            >
+      {/* PRODUCTS */}
+      <section className="grid">
+        {filtered.map((p) => (
+          <div
+            key={p.id}
+            className="card reveal"
+            onClick={() => setSelected(p)}
+          >
+            <div className="imgWrap">
               <img src={p.img} />
-              <h3>{p.name}</h3>
-              <p>{p.desc}</p>
-              <button>اطلب الآن</button>
             </div>
-          ))}
-        </div>
-      </div>
+            <h3>{p.name}</h3>
+            <p>{p.desc}</p>
+          </div>
+        ))}
+      </section>
 
-      {/* مودال التفاصيل */}
+      {/* MODAL */}
       {selected && (
         <div className="modal" onClick={() => setSelected(null)}>
-          <div className="modal-box">
+          <div className="modalBox">
             <img src={selected.img} />
             <h2>{selected.name}</h2>
-            <p className="story">{selected.story}</p>
-
-            {selected.details && (
-              <ul>
-                {selected.details.map((d, i) => (
-                  <li key={i}>{d}</li>
-                ))}
-              </ul>
-            )}
+            <p>{selected.story}</p>
           </div>
         </div>
       )}
 
       <style>{`
-        body {margin:0;font-family:sans-serif;}
-        .app {display:flex;}
+        body{margin:0;font-family:sans-serif;background:#fff}
 
-        .menu-btn {
+        .menu{
           position:fixed;
           top:20px;
           left:20px;
@@ -158,77 +145,93 @@ export default function App() {
           z-index:1000;
         }
 
-        .sidebar {
+        .sidebar{
+          position:fixed;
           width:220px;
+          height:100%;
           background:#f5f5f5;
           padding:30px;
-          position:fixed;
-          height:100%;
           transform:translateX(-100%);
-          transition:0.3s;
+          transition:0.4s;
         }
 
-        .sidebar.open {transform:translateX(0);}
-
-        .sidebar p {cursor:pointer;margin:10px 0;}
-
-        .content {
-          margin:auto;
-          padding:40px;
-          max-width:1000px;
+        .sidebar.open{
+          transform:translateX(0);
         }
 
-        .title {text-align:center;font-size:32px;}
-        .subtitle {text-align:center;color:#777;}
+        .hero{
+          height:60vh;
+          display:flex;
+          flex-direction:column;
+          justify-content:center;
+          align-items:center;
+          text-align:center;
+        }
 
-        .grid {
+        .hero h1{
+          font-size:40px;
+        }
+
+        .grid{
           display:grid;
           grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-          gap:20px;
-          margin-top:40px;
+          gap:30px;
+          padding:40px;
         }
 
-        .card {
-          background:white;
+        .card{
+          background:#fff;
+          border-radius:25px;
           padding:20px;
-          border-radius:20px;
           text-align:center;
-          cursor:pointer;
-          transition:0.3s;
+          transition:0.4s;
+          transform:perspective(1000px);
         }
 
-        .card:hover {
-          transform:translateY(-10px);
-          box-shadow:0 10px 30px rgba(0,0,0,0.1);
+        .card:hover{
+          transform:scale(1.05) rotateX(3deg);
+          box-shadow:0 20px 40px rgba(0,0,0,0.1);
         }
 
-        .card img {
+        .imgWrap{
+          overflow:hidden;
+          border-radius:20px;
+        }
+
+        img{
           width:100%;
-          border-radius:15px;
+          transition:0.4s;
         }
 
-        button {
-          background:black;
-          color:white;
-          border:none;
-          padding:10px 20px;
-          border-radius:10px;
-          margin-top:10px;
+        .card:hover img{
+          transform:scale(1.1);
         }
 
-        .modal {
+        /* reveal animation */
+        .reveal{
+          opacity:0;
+          transform:translateY(60px);
+          transition:0.8s;
+        }
+
+        .reveal.active{
+          opacity:1;
+          transform:translateY(0);
+        }
+
+        .modal{
           position:fixed;
           top:0;
           left:0;
           width:100%;
           height:100%;
-          background:rgba(0,0,0,0.5);
+          background:rgba(0,0,0,0.6);
           display:flex;
-          align-items:center;
           justify-content:center;
+          align-items:center;
         }
 
-        .modal-box {
+        .modalBox{
           background:white;
           padding:30px;
           border-radius:20px;
@@ -236,11 +239,9 @@ export default function App() {
           text-align:center;
         }
 
-        .modal img {width:100%;border-radius:15px;}
-
-        .story {
-          margin:15px 0;
-          color:#555;
+        @media(max-width:768px){
+          .hero h1{font-size:26px;}
+          .grid{padding:20px;}
         }
       `}</style>
     </div>
